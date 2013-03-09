@@ -19,7 +19,6 @@ con = None
 # change Date format to DATETIME format
 tmp = Date.split('T')
 Date = "'" + tmp[0] + " " + tmp[1] + "'"
-print Date
 
 # change Filter to VARCHAR format
 Filter = "'" + Filter + "'"
