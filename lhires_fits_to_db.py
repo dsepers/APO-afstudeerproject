@@ -26,23 +26,23 @@ Date = "'" + tmp[0] + " " + tmp[1] + "'"
 Filter = "'" + Filter + "'"
 
 # change Path to VARCHAR format
-Path = "'"+"/images/"+sys.argv[1]+"'"
+Path = "'"+"/LHIRES/"+sys.argv[1]+"'"
 
 try:
   # connect to database
   con = mysql.connector.connect(user='apouser',password='apo3141',host='localhost',database='apo')
   cur = con.cursor()
   # if table does not exist, create table
-  cur.execute("CREATE TABLE IF NOT EXISTS Images(Id INT PRIMARY KEY AUTO_INCREMENT, Size_X INT, Size_Y INT, Exposure_time FLOAT, "
+  cur.execute("CREATE TABLE IF NOT EXISTS LHIRES(Id INT PRIMARY KEY AUTO_INCREMENT, Size_X INT, Size_Y INT, Exposure_time FLOAT, "
     +"Date TIMESTAMP, Filter VARCHAR(25), Path VARCHAR(512)) ENGINE=InnoDB")
   # create query for the insert
-  query = "INSERT INTO Images (Size_X,Size_Y,Exposure_time,Filter,Date,Path) VALUES (%i,%i,%f,%s,%s,%s)" % (int(Size_X),int(Size_Y),float(Exposure_time),Filter,Date,Path)
+  query = "INSERT INTO LHIRES (Size_X,Size_Y,Exposure_time,Filter,Date,Path) VALUES (%i,%i,%f,%s,%s,%s)" % (int(Size_X),int(Size_Y),float(Exposure_time),Filter,Date,Path)
   cur.execute(query)
   # commit insert
   con.commit()
   cur.close()
   # copy file to image folder
-  shutil.copy2(sys.argv[1],"images\\"+sys.argv[1])
+  shutil.copy2(sys.argv[1],"LHIRES\\"+sys.argv[1])
 
 # catch any errors
 except mysql.connector.Error as err:
