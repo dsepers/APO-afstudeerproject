@@ -9,11 +9,15 @@ import shutil
 file = pyfits.open(sys.argv[1])
 # get info you want to put into database
 # the data selected here are some things I think are interesting to put into a database
+
+# TODO: figure out exactly which entries are the positional coordinates
 Size_X = file[0].header['NAXIS1']
 Size_Y = file[0].header['NAXIS2']
 Exposure_time = file[0].header['EXPTIME']
 Date = file[0].header['DATE-OBS']
 Filter = file[0].header['FILTER']
+RATAN = file[0].header['CRVAL1']
+DECTAN = file[0].header['CRVAL2']
 # close file
 file.close()
 con = None
@@ -34,9 +38,9 @@ try:
   cur = con.cursor()
   # if table does not exist, create table
   cur.execute("CREATE TABLE IF NOT EXISTS Images(Id INT PRIMARY KEY AUTO_INCREMENT, Size_X INT, Size_Y INT, Exposure_time FLOAT, "
-    +"Date TIMESTAMP, Filter VARCHAR(25), Path VARCHAR(512)) ENGINE=InnoDB")
+    +"Date TIMESTAMP, Filter VARCHAR(25), Path VARCHAR(512), RATAN FLOAT, DECTAN FLOAT) ENGINE=InnoDB")
   # create query for the insert
-  query = "INSERT INTO Images (Size_X,Size_Y,Exposure_time,Filter,Date,Path) VALUES (%i,%i,%f,%s,%s,%s)" % (int(Size_X),int(Size_Y),float(Exposure_time),Filter,Date,Path)
+  query = "INSERT INTO Images (Size_X,Size_Y,Exposure_time,Filter,Date,Path,RATAN,DECTAN) VALUES (%i,%i,%f,%s,%s,%s,%f,%f)" % (int(Size_X),int(Size_Y),float(Exposure_time),Filter,Date,Path,float(RATAN),float(DECTAN))
   cur.execute(query)
   # commit insert
   con.commit()
