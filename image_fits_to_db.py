@@ -31,7 +31,7 @@ def insert_image_into_db(filename):
   Filter = "'" + Filter + "'"
 
   # change Path to VARCHAR format
-  Path = "'"+"/images/"+filename+"'"
+  Path = "'"+"images/"+filename.split('/')[-1]+"'"
 
   try:
     # connect to database
@@ -47,7 +47,7 @@ def insert_image_into_db(filename):
     con.commit()
     cur.close()
     # copy file to image folder
-    shutil.copy2(filename,"images\\"+filename.split('/')[-1]) # we don't care about the file's original path here so strip it
+    shutil.copy2(filename,"C:\\xampp\\htdocs\\apo\\images\\"+filename.split('/')[-1]) # we don't care about the file's original path here so strip it
 
   # catch any errors
   except mysql.connector.Error as err:

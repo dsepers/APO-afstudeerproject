@@ -1,5 +1,5 @@
 <?php
-$searchstring = "SELECT * FROM Images";
+$searchstring = "SELECT * FROM LHIRES";
 // list of all possible fields
 $conditions = array();
 //if field is set and not empty
@@ -11,12 +11,6 @@ if (isset($_REQUEST['filter']) && $_REQUEST['filter'] != '') {
 }
 if (isset($_REQUEST['exposurelow']) && isset($_REQUEST['exposurehigh']) && $_REQUEST['exposurelow'] < $_REQUEST['exposurehigh']) {
   $conditions[] = "Exposure_time BETWEEN '" . $_REQUEST['exposurelow'] . "' AND '" . $_REQUEST['exposurehigh'] . "'";
-}
-if (isset($_REQUEST['RA---TANlow']) && isset($_REQUEST['RA---TANhigh']) && $_REQUEST['RA---TANlow'] < $_REQUEST['RA---TANhigh']) {
-  $conditions[] = "RATAN BETWEEN '" . $_REQUEST['RA---TANlow'] . "' AND '" . $_REQUEST['RA---TANhigh'] . "'";
-}
-if (isset($_REQUEST['DEC---TANlow']) && isset($_REQUEST['DEC---TANhigh']) && $_REQUEST['DEC---TANlow'] < $_REQUEST['DEC---TANhigh']) {
-  $conditions[] = "DECTAN BETWEEN '" . $_REQUEST['DEC---TANlow'] . "' AND '" . $_REQUEST['DEC---TANhigh'] . "'";
 }
 if (isset($_REQUEST['date']) && $_REQUEST['date'] != '') {
   $conditions[] = "DATE_FORMAT(Date,\"%Y-%m-%d\") = '" . $_REQUEST['date'] . "'";
@@ -44,8 +38,6 @@ echo "<table border='1'>
 <th>Filter</th>
 <th>Path</th>
 <th>Date</th>
-<th>RA---TAN</th>
-<th>DEC---TAN</th>
 </tr>";
 
 while($row = mysqli_fetch_array($result))
@@ -57,8 +49,6 @@ while($row = mysqli_fetch_array($result))
   echo "<td>" . $row['Filter'] . "</td>";
   echo "<td><a href=\"download.php?file=" . $row['Path'] . "\">".$row['Path'] . "</a></td>";
   echo "<td>" . $row['Date'] . "</td>";
-  echo "<td>" . $row['RATAN'] . "</td>";
-  echo "<td>" . $row['DECTAN'] . "</td>";
   echo "</tr>";
   }
   
