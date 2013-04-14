@@ -2,6 +2,9 @@
 # TODO:
 # - get data from fits file, run median3 over it and update the data from the fits file
 from numpy import *
+import pyfits
+from Tkinter import Tk
+from tkFileDialog import askopenfilename
 
 # assumes 2d array with numberic data
 def median3(data):
@@ -38,3 +41,17 @@ def median3(data):
       mid = list[len(list)/2 -1]
       newarray[a][b] = mid
   return newarray
+
+def run_filter(filename):
+  file = pyfits.open(filename)
+  data = file[0].data
+  print data
+  newdata = median3(data)
+  print newdata
+  file[0].data = newdata
+  file.writeto("new.fit")
+  
+if __name__ == '__main__':
+  Tk().withdraw()
+  filename = askopenfilename()
+  run_filter(filename)
