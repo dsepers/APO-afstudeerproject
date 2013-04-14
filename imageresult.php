@@ -55,7 +55,7 @@ while($row = mysqli_fetch_array($result))
   echo "<td>" . $row['Size_Y'] . "</td>";
   echo "<td>" . $row['Exposure_time'] . "</td>";
   echo "<td>" . $row['Filter'] . "</td>";
-  echo "<td><a href=\"download.php?file=" . $row['Path'] . "\">".$row['Path'] . "</a></td>";
+  echo "<td><a href=\"downloadimage.php?file=" . $row['Path'] . "\">".$row['Path'] . "</a></td>";
   echo "<td>" . $row['Date'] . "</td>";
   echo "<td>" . $row['RATAN'] . "</td>";
   echo "<td>" . $row['DECTAN'] . "</td>";

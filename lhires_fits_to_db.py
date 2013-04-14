@@ -5,6 +5,7 @@ from mysql.connector import errorcode
 import pyfits
 import sys
 import shutil
+import string
 
 def insert_lhires_into_db(filename):
   file = pyfits.open(filename)
@@ -27,7 +28,9 @@ def insert_lhires_into_db(filename):
   Filter = "'" + Filter + "'"
 
   # change Path to VARCHAR format
-  Path = "'"+"LHIRES/"+filename.split('/')[-1]+"'"
+  Path = "'"+filename.split('/')[-1]+"'"
+  a = Path.split(' ')
+  Path = string.join(a,'_')
 
   try:
     # connect to database
@@ -42,8 +45,11 @@ def insert_lhires_into_db(filename):
     # commit insert
     con.commit()
     cur.close()
-    # copy file to image folder
-    shutil.copy2(filename,"C:\\xampp\\htdocs\\apo\\LHIRES\\"+filename.split('/')[-1])
+    # copy file to LHIRES folder
+    target = "C:\\xampp\\htdocs\\apo\\LHIRES\\"+filename.split('/')[-1] # we don't care about the file's original path here so strip it
+    a = target.split(' ')
+    target = string.join(a,'_')
+    shutil.copy2(filename,target)
 
   # catch any errors
   except mysql.connector.Error as err:
