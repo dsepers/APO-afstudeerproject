@@ -6,6 +6,7 @@ import pyfits
 import sys
 import shutil
 import string
+from math import *
 
 def insert_image_into_db(filename):
   try:
@@ -25,9 +26,16 @@ def insert_image_into_db(filename):
       Size_Y = file[0].header['NAXIS2']
       Exposure_time = file[0].header['EXPTIME']
       Date = file[0].header['DATE-OBS']
+      JD = file[0].header['JD']
       Filter = file[0].header['FILTER']
-      RATAN = file[0].header['CRVAL1']
-      DECTAN = file[0].header['CRVAL2']
+      RA = file[0].header['CRVAL1'] # probably not correct
+      DEC = file[0].header['CRVAL2'] # probably not correct
+      PA = file[0].header['PA']
+      Object = file[0].header['OBJECT']
+      FWHM = file[0].header['FWHM']
+      XBINNING = file[0].header['XBINNING']
+      YBINNING = file[0].header['YBINNING']
+      Seeing = abs(file[0].header['CDELT1'] * 3600 * FWHM)
     except Exception as e:
       print "Missing required keyword:"
       print e
@@ -64,7 +72,7 @@ def insert_image_into_db(filename):
       cur.execute("CREATE TABLE IF NOT EXISTS Images(Id INT PRIMARY KEY AUTO_INCREMENT, Size_X INT, Size_Y INT, Exposure_time FLOAT, "
         +"Date TIMESTAMP, Filter VARCHAR(25), Path VARCHAR(512), RATAN FLOAT, DECTAN FLOAT) ENGINE=InnoDB")
       # create query for the insert
-      query = "INSERT INTO Images (Size_X,Size_Y,Exposure_time,Filter,Date,Path,RATAN,DECTAN) VALUES (%i,%i,%f,%s,%s,%s,%f,%f)" % (int(Size_X),int(Size_Y),float(Exposure_time),Filter,Date,Path,float(RATAN),float(DECTAN))
+      query = "INSERT INTO Images (Size_X,Size_Y,Exposure_time,Filter,Date,Path,RATAN,DECTAN) VALUES (%i,%i,%f,%s,%s,%s,%f,%f)" % (int(Size_X),int(Size_Y),float(Exposure_time),Filter,Date,Path,float(RA),float(DEC))
       cur.execute(query)
       # commit insert
       con.commit()
