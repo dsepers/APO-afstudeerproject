@@ -64,35 +64,39 @@ def insert_image_into_db(filename):
     
     # create directory for file
     datepart = Datetemp.split('T')[0]
-    datepart = "'"+datepart+"'"
-    if not os.path.exists(datepart):
+    datepart = datepart
+    if not os.path.exists("C:/xampp/htdocs/apo/images/"+datepart):
       os.mkdir("C:/xampp/htdocs/apo/images/"+datepart)
-    if not os.path.exists(datepart + "/" + Object):
+    if not os.path.exists("C:/xampp/htdocs/apo/images/"+datepart + "/" + Object):
       os.mkdir("C:/xampp/htdocs/apo/images/"+datepart + "/" + Object)
 
     # change Path to VARCHAR format
-    Path = "'"+filename.split('/')[-1]+"'"
+    Path = filename.split('/')[-1]
     a = Path.split(' ')
     Path = string.join(a,'_')
     
-    Path = datepart + "/" + Object + "/" + Path
+    Path = "'" + datepart + "/" + Object + "/" + Path + "'"
+    
+    # change Object to VARCHAR
+    Object = "'"+Object+"'"
 
     try:
       # connect to database
       con = mysql.connector.connect(user='apouser',password='apo3141',host='localhost',database='apo')
       cur = con.cursor()
+      createtablequery = "CREATE TABLE IF NOT EXISTS Images(Id INT PRIMARY KEY AUTO_INCREMENT, Size_X INT, Size_Y INT, Exposure_time FLOAT, Date TIMESTAMP, Filter VARCHAR(25), Path VARCHAR(512), RA FLOAT, DECL FLOAT, PA FLOAT, OBJECT VARCHAR(128), FWHM FLOAT, XBINNING FLOAT, YBINNING FLOAT, SEEING FLOAT) ENGINE=InnoDB"
+      print createtablequery
       # if table does not exist, create table
-      cur.execute("CREATE TABLE IF NOT EXISTS Images(Id INT PRIMARY KEY AUTO_INCREMENT, Size_X INT, Size_Y INT, Exposure_time FLOAT, "
-        +"Date TIMESTAMP, Filter VARCHAR(25), Path VARCHAR(512), RA FLOAT, DEC FLOAT, PA FLOAT, OBJECT VARCHAR(128), FWHM FLOAT, "
-        +"XBINNING FLOAT, YBINNING FLOAT, SEEING FLOAT) ENGINE=InnoDB")
+      cur.execute(createtablequery)
       # create query for the insert
-      query = "INSERT INTO Images (Size_X,Size_Y,Exposure_time,Filter,Date,Path,RA,DEC,PA,OBJECT,FWHM,XBINNING,YBINNING,SEEING) VALUES (%i,%i,%f,%s,%s,%s,%f,%f,%f,%s,%f,%f,%f,%f)" % (int(Size_X),int(Size_Y),float(Exposure_time),Filter,Date,Path,float(RA),float(DEC),float(PA),OBJECT,float(FWHM),float(XBINNING),float(YBINNING),float(SEEING))
+      query = "INSERT INTO Images (Size_X,Size_Y,Exposure_time,Date,Filter,Path,RA,DECL,PA,OBJECT,FWHM,XBINNING,YBINNING,SEEING) VALUES (%i,%i,%f,%s,%s,%s,%f,%f,%f,%s,%f,%f,%f,%f)" % (int(Size_X),int(Size_Y),float(Exposure_time),Date,Filter,Path,float(RA),float(DEC),float(PA),Object,float(FWHM),float(XBINNING),float(YBINNING),float(Seeing))
+      print query
       cur.execute(query)
       # commit insert
       con.commit()
       cur.close()
       # copy file to image folder
-      target = "C:\\xampp\\htdocs\\apo\\images\\"+filename.split('/')[-1] # we don't care about the file's original path here so strip it
+      target = "C:/xampp/htdocs/apo/images/"+Path.split("'")[1] # we don't care about the file's original path here so strip it
       a = target.split(' ')
       target = string.join(a,'_')
       shutil.copy2(filename,target)

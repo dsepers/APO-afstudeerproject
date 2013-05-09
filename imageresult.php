@@ -16,7 +16,7 @@ if (isset($_REQUEST['RAlow']) && isset($_REQUEST['RAhigh']) && $_REQUEST['RAlow'
   $conditions[] = "RA BETWEEN '" . $_REQUEST['RAlow'] . "' AND '" . $_REQUEST['RAhigh'] . "'";
 }
 if (isset($_REQUEST['DEClow']) && isset($_REQUEST['DEChigh']) && $_REQUEST['DEClow'] < $_REQUEST['DEChigh']) {
-  $conditions[] = "DEC BETWEEN '" . $_REQUEST['DEClow'] . "' AND '" . $_REQUEST['DEChigh'] . "'";
+  $conditions[] = "DECL BETWEEN '" . $_REQUEST['DEClow'] . "' AND '" . $_REQUEST['DEChigh'] . "'";
 }
 if (isset($_REQUEST['date']) && $_REQUEST['date'] != '') {
   $conditions[] = "DATE_FORMAT(Date,\"%Y-%m-%d\") = '" . $_REQUEST['date'] . "'";
@@ -65,14 +65,14 @@ while($row = mysqli_fetch_array($result))
   echo "<td><a href=\"downloadimage.php?file=" . $row['Path'] . "\">".$row['Path'] . "</a></td>";
   echo "<td>" . $row['Date'] . "</td>";
   echo "<td>" . $row['RA'] . "</td>";
-  echo "<td>" . $row['DEC'] . "</td>";
+  echo "<td>" . $row['DECL'] . "</td>";
   echo "<td>" . $row['PA'] . "</td>";
   echo "<td>" . $row['OBJECT'] . "</td>";
   echo "<td>" . $row['FWHM'] . "</td>";
   echo "<td>" . $row['XBINNING'] . "</td>";
   echo "<td>" . $row['YBINNING'] . "</td>";
   echo "<td>" . $row['SEEING'] . "</td>";
-  echo "<td><a href=http://simbad.u-strasbg.fr/simbad/sim-basic?Ident=" . $row['OBJECT'] . "&submit=SIMBAD+search></td>";
+  echo "<td><a href=http://simbad.u-strasbg.fr/simbad/sim-basic?Ident=" . $row['OBJECT'] . "&submit=SIMBAD+search>Link</a></td>";
   echo "</tr>";
   }
   
