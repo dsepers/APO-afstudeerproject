@@ -3,8 +3,8 @@ $searchstring = "SELECT * FROM Images";
 // list of all possible fields
 $conditions = array();
 //if field is set and not empty
-if (isset($_REQUEST['filename']) && $_REQUEST['filename'] != '') {
-  $conditions[] = "Path LIKE '%" . mysql_real_escape_string($_REQUEST['filename']) . "%'";
+if (isset($_REQUEST['object']) && $_REQUEST['object'] != '') {
+  $conditions[] = "OBJECT LIKE '%" . mysql_real_escape_string($_REQUEST['object']) . "%'";
 }
 if (isset($_REQUEST['filter']) && $_REQUEST['filter'] != '') {
   $conditions[] = "Filter LIKE '%" . mysql_real_escape_string($_REQUEST['filter']) . "%'";
@@ -12,11 +12,11 @@ if (isset($_REQUEST['filter']) && $_REQUEST['filter'] != '') {
 if (isset($_REQUEST['exposurelow']) && isset($_REQUEST['exposurehigh']) && $_REQUEST['exposurelow'] < $_REQUEST['exposurehigh']) {
   $conditions[] = "Exposure_time BETWEEN '" . $_REQUEST['exposurelow'] . "' AND '" . $_REQUEST['exposurehigh'] . "'";
 }
-if (isset($_REQUEST['RA---TANlow']) && isset($_REQUEST['RA---TANhigh']) && $_REQUEST['RA---TANlow'] < $_REQUEST['RA---TANhigh']) {
-  $conditions[] = "RATAN BETWEEN '" . $_REQUEST['RA---TANlow'] . "' AND '" . $_REQUEST['RA---TANhigh'] . "'";
+if (isset($_REQUEST['RAlow']) && isset($_REQUEST['RAhigh']) && $_REQUEST['RAlow'] < $_REQUEST['RAhigh']) {
+  $conditions[] = "RA BETWEEN '" . $_REQUEST['RAlow'] . "' AND '" . $_REQUEST['RAhigh'] . "'";
 }
-if (isset($_REQUEST['DEC---TANlow']) && isset($_REQUEST['DEC---TANhigh']) && $_REQUEST['DEC---TANlow'] < $_REQUEST['DEC---TANhigh']) {
-  $conditions[] = "DECTAN BETWEEN '" . $_REQUEST['DEC---TANlow'] . "' AND '" . $_REQUEST['DEC---TANhigh'] . "'";
+if (isset($_REQUEST['DEClow']) && isset($_REQUEST['DEChigh']) && $_REQUEST['DEClow'] < $_REQUEST['DEChigh']) {
+  $conditions[] = "DEC BETWEEN '" . $_REQUEST['DEClow'] . "' AND '" . $_REQUEST['DEChigh'] . "'";
 }
 if (isset($_REQUEST['date']) && $_REQUEST['date'] != '') {
   $conditions[] = "DATE_FORMAT(Date,\"%Y-%m-%d\") = '" . $_REQUEST['date'] . "'";
@@ -44,8 +44,15 @@ echo "<table border='1'>
 <th>Filter</th>
 <th>Path</th>
 <th>Date</th>
-<th>RA---TAN</th>
-<th>DEC---TAN</th>
+<th>RA</th>
+<th>DEC</th>
+<th>PA</th>
+<th>Object</th>
+<th>FWHM</th>
+<th>X-Binning</th>
+<th>Y-Binning</th>
+<th>Seeing</th>
+<th>Simbad link</th>
 </tr>";
 
 while($row = mysqli_fetch_array($result))
@@ -57,8 +64,15 @@ while($row = mysqli_fetch_array($result))
   echo "<td>" . $row['Filter'] . "</td>";
   echo "<td><a href=\"downloadimage.php?file=" . $row['Path'] . "\">".$row['Path'] . "</a></td>";
   echo "<td>" . $row['Date'] . "</td>";
-  echo "<td>" . $row['RATAN'] . "</td>";
-  echo "<td>" . $row['DECTAN'] . "</td>";
+  echo "<td>" . $row['RA'] . "</td>";
+  echo "<td>" . $row['DEC'] . "</td>";
+  echo "<td>" . $row['PA'] . "</td>";
+  echo "<td>" . $row['OBJECT'] . "</td>";
+  echo "<td>" . $row['FWHM'] . "</td>";
+  echo "<td>" . $row['XBINNING'] . "</td>";
+  echo "<td>" . $row['YBINNING'] . "</td>";
+  echo "<td>" . $row['SEEING'] . "</td>";
+  echo "<td><a href=http://simbad.u-strasbg.fr/simbad/sim-basic?Ident=" . $row['OBJECT'] . "&submit=SIMBAD+search></td>";
   echo "</tr>";
   }
   
